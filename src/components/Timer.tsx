@@ -44,50 +44,27 @@ function Timer() {
     <div
       className="relative overflow-hidden w-full"
       style={{
-        border: "0.175rem solid #000",
-        boxShadow: "0.25rem 0.25rem 0 #000",
-        borderRadius: "0.25rem",
+        border: "0.2rem solid #000",
+        boxShadow: "0.4rem 0.4rem 0 #000",
+        borderRadius: "0.4rem",
+        background: "#fff"
       }}
     >
       <div
-        style={{
-          height: 4,
-          background:
-            "linear-gradient(to right, #DA100C 33.33%, #FFE105 33.33%, #FFE105 66.66%, #50BAEA 66.66%)",
-        }}
-      />
-
-      <div
         className="relative"
         style={{
-          padding: "clamp(0.6rem, 2.5vw, 1.5rem)",
-          background: `url("data:image/svg+xml;utf8,<svg width='100' height='100' transform='rotate(25)' opacity='0.15' version='1.1' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><g fill='%23250E17'><circle cx='25' cy='25' r='8'/><circle cx='75' cy='75' r='8'/><circle cx='75' cy='25' r='8'/><circle cx='25' cy='75' r='8'/></g></svg>"), #fff`,
-          backgroundSize: "1rem 1rem, 100% 100%",
+          padding: "clamp(1rem, 4vw, 2rem)",
+          background: `url("data:image/svg+xml;utf8,<svg width='100' height='100' transform='rotate(25)' opacity='0.05' version='1.1' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><g fill='%23000'><circle cx='25' cy='25' r='8'/><circle cx='75' cy='75' r='8'/><circle cx='75' cy='25' r='8'/><circle cx='25' cy='75' r='8'/></g></svg>"), #fff`,
+          backgroundSize: "1.5rem 1.5rem, 100% 100%",
         }}
       >
-        <h3
-          className="hero-title font-black uppercase"
-          style={{
-            fontSize: "clamp(0.7rem, 1.8vw, 1.25rem)",
-            color: "#111",
-            marginBottom: "0.5rem",
-          }}
-        >
-          COUNTDOWN
-        </h3>
-
-        <div
-          style={{
-            width: "40px",
-            height: 2,
-            background: "#DA100C",
-            marginBottom: "1rem",
-          }}
-        />
-
         <div
           className="grid grid-cols-3"
-          style={{ gap: "0.75rem" }}
+          style={{ 
+            gap: "clamp(0.5rem, 2vw, 1rem)",
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)"
+          }}
         >
           {blocks.map(({ value, label }, i) => (
             <div
@@ -95,16 +72,17 @@ function Timer() {
               className="flex flex-col items-center justify-center"
               style={{
                 background: "#fff",
-                border: "2px solid #000",
-                boxShadow: `2px 2px 0 ${blockColors[i]}`,
-                padding: "0.75rem 0.25rem",
+                border: "2.5px solid #000",
+                boxShadow: `3px 3px 0 ${blockColors[i]}`,
+                padding: "clamp(0.5rem, 2vw, 1.5rem) 0.25rem",
               }}
             >
               <span
                 className="hero-title font-black"
                 style={{
-                  fontSize: "clamp(1.3rem, 4.5vw, 3rem)",
+                  fontSize: "clamp(1.5rem, 5vw, 4rem)",
                   color: "#111",
+                  lineHeight: 1.1
                 }}
               >
                 {String(value).padStart(2, "0")}
@@ -113,8 +91,9 @@ function Timer() {
               <span
                 className="uppercase font-bold"
                 style={{
-                  fontSize: "0.6rem",
-                  color: "rgba(0,0,0,0.5)",
+                  fontSize: "clamp(0.6rem, 1.2vw, 0.9rem)",
+                  color: "rgba(0,0,0,0.6)",
+                  marginTop: "0.25rem"
                 }}
               >
                 {label}
@@ -135,27 +114,31 @@ export default function TimerSection() {
     <div
       className="flex flex-col items-center justify-center w-full"
       style={{
-        gap: "1.5rem",
+        gap: "2rem",
         padding: "0 1rem",
       }}
     >
-      {!isMobile && (
+      <div className="flex flex-col items-center gap-2">
         <h2
-          className="text-white"
+          className="text-white uppercase"
           style={{
             fontFamily: "Dela Gothic One",
-            fontSize: "clamp(1.5rem, 4vw, 4rem)",
-            textShadow: "2px 2px 0 #000",
+            fontSize: "clamp(1.5rem, 5vw, 4.5rem)",
+            textShadow: "4px 4px 0 #000",
+            letterSpacing: "-0.02em"
           }}
         >
-          HacktoFuture4.0
+          COUNTDOWN
         </h2>
-      )}
+        <span className="text-white font-bold opacity-80" style={{ letterSpacing: "0.2em", fontSize: "0.8rem" }}>
+          HACKTOFUTURE 4.0
+        </span>
+      </div>
 
       <div
         className="w-full"
         style={{
-          maxWidth: "40rem",
+          maxWidth: "50rem",
         }}
       >
         <Timer />
