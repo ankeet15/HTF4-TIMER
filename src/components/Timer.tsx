@@ -19,8 +19,8 @@ function Timer() {
 
     const total = Math.floor(difference / 1000);
     setTimer({
-      days: Math.floor(total / 86400),
-      hours: Math.floor(total / 3600) % 24,
+      days: 0,
+      hours: Math.floor(total / 3600),
       minutes: Math.floor(total / 60) % 60,
       seconds: total % 60,
     });
@@ -33,13 +33,12 @@ function Timer() {
   }, [setTimeLeft]);
 
   const blocks = [
-    { value: timer.days, label: "Days" },
     { value: timer.hours, label: "Hrs" },
     { value: timer.minutes, label: "Min" },
     { value: timer.seconds, label: "Sec" },
   ];
 
-  const blockColors = ["#DA100C", "#FFE105", "#50BAEA", "#DA100C"];
+  const blockColors = ["#DA100C", "#FFE105", "#50BAEA"];
 
   return (
     <div
@@ -74,7 +73,7 @@ function Timer() {
             marginBottom: "0.5rem",
           }}
         >
-          HacktoFuture4.0 Starts In
+          COUNTDOWN
         </h3>
 
         <div
@@ -87,7 +86,7 @@ function Timer() {
         />
 
         <div
-          className="grid grid-cols-4"
+          className="grid grid-cols-3"
           style={{ gap: "0.75rem" }}
         >
           {blocks.map(({ value, label }, i) => (
@@ -122,25 +121,6 @@ function Timer() {
               </span>
             </div>
           ))}
-        </div>
-
-        <div
-          style={{
-            borderTop: "1px solid rgba(0,0,0,0.1)",
-            marginTop: "1rem",
-            paddingTop: "0.5rem",
-          }}
-        >
-          <span
-            className="hero-title"
-            style={{
-              fontWeight: 800,
-              fontSize: "0.8rem",
-              color: "rgba(0,0,0,0.8)",
-            }}
-          >
-            15th April, 2026
-          </span>
         </div>
       </div>
     </div>
