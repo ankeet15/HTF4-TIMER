@@ -10,7 +10,7 @@ function Timer() {
     days: 0,
   });
 
-  const HtfDate = Date.parse("2026-04-15T18:00:00+05:30");
+  const HtfDate = Date.parse("2026-04-16T05:50:00+05:30");
 
   const setTimeLeft = useCallback(() => {
     const difference = HtfDate - Date.now();
