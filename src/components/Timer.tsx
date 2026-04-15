@@ -8,53 +8,36 @@ function Timer() {
     hours: 0,
     days: 0,
   });
-  const [startTime, setStartTime] = useState<number | null>(() => {
-    const saved = localStorage.getItem("timer_start_time");
-    return saved ? parseInt(saved, 10) : null;
-  });
-  const [isStarted, setIsStarted] = useState(() => {
-    return localStorage.getItem("timer_start_time") !== null;
-  });
 
-  const THIRTY_SIX_HOURS_MS = 36 * 60 * 60 * 1000; // 129,600,000 ms
+  // Target time: 17th Apr 2026, 7:00 AM IST
+  const TARGET_DATE = new Date("2026-04-17T07:00:00+05:30").getTime();
 
   const setTimeLeft = useCallback(() => {
-    if (!isStarted || startTime === null) {
-      setTimer({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-      return;
-    }
-
-    const elapsed = Date.now() - startTime;
-    const remaining = Math.max(0, THIRTY_SIX_HOURS_MS - elapsed);
+    const now = Date.now();
+    const remaining = Math.max(0, TARGET_DATE - now);
 
     if (remaining === 0) {
       setTimer({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       return;
     }
 
-    const total = Math.floor(remaining / 1000);
+    const totalSeconds = Math.floor(remaining / 1000);
+    const totalMinutes = Math.floor(totalSeconds / 60);
+    const totalHours = Math.floor(totalMinutes / 60);
+
     setTimer({
       days: 0,
-      hours: Math.floor(total / 3600),
-      minutes: Math.floor(total / 60) % 60,
-      seconds: total % 60,
+      hours: totalHours,
+      minutes: totalMinutes % 60,
+      seconds: totalSeconds % 60,
     });
-  }, [isStarted, startTime]);
-
-  const handleStartTimer = () => {
-    const now = Date.now();
-    setIsStarted(true);
-    setStartTime(now);
-    localStorage.setItem("timer_start_time", now.toString());
-  };
+  }, [TARGET_DATE]);
 
   useEffect(() => {
-    if (!isStarted) return;
-
     setTimeLeft();
     const id = setInterval(setTimeLeft, 1000);
     return () => clearInterval(id);
-  }, [setTimeLeft, isStarted]);
+  }, [setTimeLeft]);
 
   const blocks = [
     { value: timer.hours, label: "Hrs" },
@@ -127,49 +110,7 @@ function Timer() {
           ))}
         </div>
 
-        {/* Start Button - Bottom Right */}
-        {!isStarted && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginTop: "clamp(1rem, 2vw, 1.5rem)",
-              paddingRight: "clamp(0.5rem, 1vw, 1rem)",
-            }}
-          >
-            <button
-              onClick={handleStartTimer}
-              style={{
-                padding: "0.75rem 1.5rem",
-                fontSize: "clamp(0.9rem, 3vw, 2.5rem)",
-                fontWeight: "bold",
-                backgroundColor: "#DA100C",
-                color: "#fff",
-                border: "clamp(2px, 0.3vw, 8px) solid #000",
-                boxShadow: "clamp(3px, 0.5vw, 12px) clamp(3px, 0.5vw, 12px) 0 #000",
-                cursor: "pointer",
-                borderRadius: "clamp(0.25rem, 0.5vw, 1rem)",
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-                transition: "all 0.2s ease",
-              }}
-              onMouseDown={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.boxShadow = "1px 1px 0 #000";
-                (e.currentTarget as HTMLButtonElement).style.transform = "translate(2px, 2px)";
-              }}
-              onMouseUp={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.boxShadow = "3px 3px 0 #000";
-                (e.currentTarget as HTMLButtonElement).style.transform = "translate(0, 0)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.boxShadow = "3px 3px 0 #000";
-                (e.currentTarget as HTMLButtonElement).style.transform = "translate(0, 0)";
-              }}
-            >
-              START
-            </button>
-          </div>
-        )}
+        {/* Removed Start Button logic as it is now an automated countdown */}
       </div>
     </div>
   );
@@ -201,12 +142,6 @@ export default function TimerSection() {
         <span 
           className="text-white font-bold opacity-80" 
           style={{ letterSpacing: "0.2em", fontSize: "clamp(0.8rem, 2vw, 2rem)", cursor: "default" }}
-          onClick={() => {
-            if (window.confirm("Are you sure you want to reset the entire timer?")) {
-              localStorage.removeItem("timer_start_time");
-              window.location.reload();
-            }
-          }}
         >
           HACKTOFUTURE 4.0
         </span>
