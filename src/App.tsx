@@ -120,9 +120,9 @@ function App() {
       {/* ── Central Timer Content ── */}
       <div style={{
         position: "relative", zIndex: 10,
-        width: "100%", maxWidth: "48rem",
-        padding: "0 2rem",
-        display: "flex", flexDirection: "column", alignItems: "center", gap: "1.5rem"
+        width: "100%", maxWidth: "90rem",
+        padding: "0 clamp(2rem, 5vw, 6rem)",
+        display: "flex", flexDirection: "column", alignItems: "center", gap: "clamp(1.5rem, 4vw, 4rem)"
       }}>
         <TimerSection />
       </div>
