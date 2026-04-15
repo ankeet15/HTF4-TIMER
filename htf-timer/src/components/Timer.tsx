@@ -1,6 +1,5 @@
 
 import { useState, useEffect, useCallback } from "react";
-import { useIsMobile } from "../hooks/useIsMobile";
 
 function Timer() {
   const [timer, setTimer] = useState({
@@ -9,8 +8,13 @@ function Timer() {
     hours: 0,
     days: 0,
   });
-  const [isStarted, setIsStarted] = useState(false);
-  const [startTime, setStartTime] = useState<number | null>(null);
+  const [startTime, setStartTime] = useState<number | null>(() => {
+    const saved = localStorage.getItem("timer_start_time");
+    return saved ? parseInt(saved, 10) : null;
+  });
+  const [isStarted, setIsStarted] = useState(() => {
+    return localStorage.getItem("timer_start_time") !== null;
+  });
 
   const THIRTY_SIX_HOURS_MS = 36 * 60 * 60 * 1000; // 129,600,000 ms
 
@@ -38,8 +42,10 @@ function Timer() {
   }, [isStarted, startTime]);
 
   const handleStartTimer = () => {
+    const now = Date.now();
     setIsStarted(true);
-    setStartTime(Date.now());
+    setStartTime(now);
+    localStorage.setItem("timer_start_time", now.toString());
   };
 
   useEffect(() => {
@@ -79,7 +85,7 @@ function Timer() {
         <div
           className="grid grid-cols-3"
           style={{ 
-            gap: "clamp(0.5rem, 2vw, 1rem)",
+            gap: "clamp(0.5rem, 3vw, 3rem)",
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)"
           }}
@@ -96,11 +102,12 @@ function Timer() {
               }}
             >
               <span
-                className="hero-title font-black"
+                className="font-bold tabular-nums"
                 style={{
-                  fontSize: "clamp(1.5rem, 5vw, 4rem)",
+                  fontSize: "clamp(1.5rem, 10vw, 12rem)",
                   color: "#111",
-                  lineHeight: 1.1
+                  lineHeight: 1.1,
+                  fontFamily: "var(--font-body)"
                 }}
               >
                 {String(value).padStart(2, "0")}
@@ -109,7 +116,7 @@ function Timer() {
               <span
                 className="uppercase font-bold"
                 style={{
-                  fontSize: "clamp(0.6rem, 1.2vw, 0.9rem)",
+                  fontSize: "clamp(0.6rem, 2.5vw, 2.5rem)",
                   color: "rgba(0,0,0,0.6)",
                   marginTop: "0.25rem"
                 }}
@@ -134,14 +141,14 @@ function Timer() {
               onClick={handleStartTimer}
               style={{
                 padding: "0.75rem 1.5rem",
-                fontSize: "clamp(0.9rem, 2vw, 1.1rem)",
+                fontSize: "clamp(0.9rem, 3vw, 2.5rem)",
                 fontWeight: "bold",
                 backgroundColor: "#DA100C",
                 color: "#fff",
-                border: "2px solid #000",
-                boxShadow: "3px 3px 0 #000",
+                border: "clamp(2px, 0.3vw, 8px) solid #000",
+                boxShadow: "clamp(3px, 0.5vw, 12px) clamp(3px, 0.5vw, 12px) 0 #000",
                 cursor: "pointer",
-                borderRadius: "0.25rem",
+                borderRadius: "clamp(0.25rem, 0.5vw, 1rem)",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
                 transition: "all 0.2s ease",
@@ -155,8 +162,8 @@ function Timer() {
                 (e.currentTarget as HTMLButtonElement).style.transform = "translate(0, 0)";
               }}
               onMouseLeave={(e) => {
-                (e.currentButton as HTMLButtonElement).style.boxShadow = "3px 3px 0 #000";
-                (e.currentButton as HTMLButtonElement).style.transform = "translate(0, 0)";
+                (e.currentTarget as HTMLButtonElement).style.boxShadow = "3px 3px 0 #000";
+                (e.currentTarget as HTMLButtonElement).style.transform = "translate(0, 0)";
               }}
             >
               START
@@ -170,7 +177,6 @@ function Timer() {
 
 /* ───────────────────── Timer Only Layout ───────────────────── */
 export default function TimerSection() {
-  const isMobile = useIsMobile();
 
   return (
     <div
@@ -185,14 +191,23 @@ export default function TimerSection() {
           className="text-white uppercase"
           style={{
             fontFamily: "Dela Gothic One",
-            fontSize: "clamp(1.5rem, 5vw, 4.5rem)",
-            textShadow: "4px 4px 0 #000",
+            fontSize: "clamp(1.5rem, 8vw, 10rem)",
+            textShadow: "clamp(4px, 1vw, 12px) clamp(4px, 1vw, 12px) 0 #000",
             letterSpacing: "-0.02em"
           }}
         >
           COUNTDOWN
         </h2>
-        <span className="text-white font-bold opacity-80" style={{ letterSpacing: "0.2em", fontSize: "0.8rem" }}>
+        <span 
+          className="text-white font-bold opacity-80" 
+          style={{ letterSpacing: "0.2em", fontSize: "clamp(0.8rem, 2vw, 2rem)", cursor: "default" }}
+          onClick={() => {
+            if (window.confirm("Are you sure you want to reset the entire timer?")) {
+              localStorage.removeItem("timer_start_time");
+              window.location.reload();
+            }
+          }}
+        >
           HACKTOFUTURE 4.0
         </span>
       </div>
@@ -200,7 +215,7 @@ export default function TimerSection() {
       <div
         className="w-full"
         style={{
-          maxWidth: "50rem",
+          maxWidth: "80rem",
         }}
       >
         <Timer />
